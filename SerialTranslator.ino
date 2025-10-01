@@ -1,5 +1,5 @@
-define POWER_PIN 9
-define STATUS_PIN 8
+#define POWER_PIN 9
+#define STATUS_PIN 8
 
 String receivedMessage;
 String sentMessage;
@@ -26,8 +26,8 @@ void setup() {
   Serial1.begin(9600);            // Inicijalizacija Serial1 porta za INPUT podataka (Pin 19 i 18)
   Serial2.begin(9600);            // Inicijalizacija Serial2 porta za OUTPUT podataka (Pin 17 i 16)
   pinMode(POWER_PIN, OUTPUT);
-  pinMode(SATUS_PIN, OUTPUT);
-  delay(1000);                    // Sačekaj sekundu da bi bili sigurni da je Serijska komunikacija inicijalizovana
+  pinMode(STATUS_PIN, OUTPUT);
+  delay(1000);                    // Sačekaj sekundu da bi bili sigurni da je Serijska komunikacija uspešno inicijalizovana
   digitalWrite(POWER_PIN, HIGH);  // Uključi crveni LED da se vidi da je kutija pod naponom
 }
 
@@ -37,8 +37,8 @@ void loop() {
     receivedMessage = Serial1.readString();                 // Prijem informacija
     Serial.println("PRIMLJENO: " + receivedMessage);        // Debug
     receivedMessage.trim();                                 // Brisanje nepotrebnog whitespacea i kontrolnih kodova
-    receivedMessage.remove(0,32);                           // Brisanje prva 32 karaktera (0 označava lokaciju slova od kojeg se briše, a 32 označava koliko karaktera se briše)
-    receivedMessage.remove(receivedMessage.length()-1,1);   // Brisanje zadnjeg karaktera, kojeg štampač obično vidi kao zvezdicu *, ako nije potrebno dodati // na početku ove linije
+    receivedMessage.remove(0,32);                           // Brisanje prva 32 karaktera iz primljene komande; obrisati ili postaviti // na početku linije ako vam ne treba
+    receivedMessage.remove(receivedMessage.length()-1,1);   // Brisanje zadnjeg karaktera, kojeg printeri najčešće prepoznaju kao * simbol; obrisati ili postaviti // ako vam ne treba
     sentMessage = "JDA|TXT=" + receivedMessage;             // Ubacivanje ZTC koda na tekst
     Serial2.println(sentMessage);                           // Slanje ispisa na štampač
     Serial.println("POSLANO: " + sentMessage);              // Debug
